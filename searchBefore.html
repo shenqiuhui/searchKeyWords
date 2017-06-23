@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>搜索关键词并高亮显示————开头</title>
+    <script src="vue-1.0.24.min.js"></script>
+    <style>
+        * {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .box {
+            padding: 20px 30px;
+        }
+        input {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .high_light {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <input v-model="ipt" type="text" @focus="hideLis" @blur="showLis" @keyup="getKeyWords">
+        <ul>
+            <li v-if="item.flag" v-for="item in message"><span :class="{ high_light: style }" v-if="item.ipt">{{ item.ipt }}</span>{{ item.title }}</li>
+        </ul>
+    </div>
+    <script> 
+        var data = {
+            "status": 0,
+            "message": [
+                {
+                    "title": "朝阳慈云寺四惠十里堡都会国际大厦",
+                },
+                {
+                    "title": "中骏世界城商务中心",
+                },
+                {
+                    "title": "朝阳团结湖瑞辰国际中心",
+                },
+                {
+                    "title": "北京天银大厦",
+                },
+                {
+                    "title": "旺座中心",
+                },
+                {
+                    "title": "北京融科资讯中心A座",
+                },
+                {
+                    "title": "北京知春大厦",
+                },
+                {
+                    "title": "昆泰大厦",
+                },
+                {
+                    "title": "科技财富中心",
+                },
+                {
+                    "title": "国英1号",
+                },
+                {
+                    "title": "亿城中心",
+                },
+                {
+                    "title": "汇置通大厦",
+                },
+                {
+                    "title": "北京庄胜广场",
+                },
+                {
+                    "title": "北京森根国际",
+                },
+                {
+                    "title": "都城科技大厦",
+                },
+                {
+                    "title": "白广路北口综合楼",
+                },
+                {
+                    "title": "艾维克大厦",
+                },
+                {
+                    "title": "中关村科技发展大厦",
+                },
+                {
+                    "title": "中电信息大厦",
+                },
+                {
+                    "title": "东润时代大厦",
+                }
+            ]
+        }
+        var model = {
+            message: data.message,
+            ipt: '',
+            style: true
+        }
+        model.message.forEach( function ( val ) {
+            val.flag = true;
+            val.ipt = '';
+        } );
+        var c = new Vue( {
+            el: '.box',
+            data: model,
+            methods: {
+                hideLis: function () {
+                    this.message.forEach( function ( val ) {
+                        val.flag = false;
+                    } );
+                    this.style = true;
+                },
+                showLis: function () {
+                    this.message.forEach( function ( val ) {
+                        val.flag = true;
+                    } );
+                    this.ipt = '';
+                    this.style = false;
+                },
+                getKeyWords: function () {
+                    var _ipt = this.ipt;
+                    this.message.forEach( function ( val ) {
+                        val.title = val.ipt + val.title;
+                        val.ipt = '';
+                        var index = val.title.indexOf( _ipt );
+                        if( _ipt == '' ) {
+                            val.flag = false;
+                        } else {
+                            if( index == 0 ) {
+                                val.ipt = _ipt
+                                val.title = val.title.split( _ipt ).join('');
+                                val.flag = true;
+                            } else {
+                                val.flag = false;
+                            }
+                        }
+                    } );
+                }
+            }
+        } );
+    </script>
+</body>
+</html>
